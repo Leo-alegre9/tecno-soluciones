@@ -1,6 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import Container from '@/Components/UI/Container';
 import Button from '@/Components/UI/Button';
 import Badge from '@/Components/UI/Badge';
 import ProductCard from '@/Components/ProductCard';
@@ -28,18 +29,18 @@ export default function ProductShow({ product, related }) {
         <PublicLayout>
             <Head title={product.name} />
 
-            <section className="bg-ink-950 py-10">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <section className="py-10">
+                <Container>
                     <Link
                         href={route('catalog.index')}
-                        className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-ink-400 hover:text-white"
+                        className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition hover:text-foreground"
                     >
                         <ChevronLeft className="h-4 w-4" /> Volver al catálogo
                     </Link>
 
                     <div className="grid gap-10 lg:grid-cols-2">
                         <div>
-                            <div className="aspect-square overflow-hidden rounded-2xl border border-white/10 bg-ink-900">
+                            <div className="aspect-square overflow-hidden rounded-card border border-border bg-surface">
                                 {images[active] ? (
                                     <img
                                         src={images[active].url}
@@ -59,8 +60,8 @@ export default function ProductShow({ product, related }) {
                                         <button
                                             key={image?.id ?? index}
                                             onClick={() => setActive(index)}
-                                            className={`h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 ${
-                                                active === index ? 'border-brand-500' : 'border-transparent'
+                                            className={`h-16 w-16 shrink-0 overflow-hidden rounded-control border-2 transition ${
+                                                active === index ? 'border-primary' : 'border-transparent'
                                             }`}
                                         >
                                             <img src={image.url} alt="" className="h-full w-full object-cover" />
@@ -72,11 +73,11 @@ export default function ProductShow({ product, related }) {
 
                         <div>
                             {product.category && (
-                                <span className="text-xs font-semibold uppercase tracking-wide text-brand-400">
+                                <span className="text-xs font-semibold uppercase tracking-wide text-primary">
                                     {product.category.name}
                                 </span>
                             )}
-                            <h1 className="mt-2 font-display text-2xl font-bold text-white sm:text-3xl">
+                            <h1 className="mt-2 font-display text-2xl font-bold text-foreground sm:text-3xl">
                                 {product.name}
                             </h1>
 
@@ -90,18 +91,18 @@ export default function ProductShow({ product, related }) {
                             </div>
 
                             <div className="mt-6 flex items-baseline gap-3">
-                                <span className="font-display text-3xl font-extrabold text-white">
+                                <span className="font-display text-3xl font-extrabold text-foreground">
                                     {formatCurrency(product.price)}
                                 </span>
                                 {product.compare_price && (
-                                    <span className="text-lg text-ink-400 line-through">
+                                    <span className="text-lg text-muted-foreground line-through">
                                         {formatCurrency(product.compare_price)}
                                     </span>
                                 )}
                             </div>
 
                             {product.description && (
-                                <p className="mt-6 whitespace-pre-line leading-relaxed text-ink-300">
+                                <p className="mt-6 whitespace-pre-line leading-relaxed text-muted-foreground">
                                     {product.description}
                                 </p>
                             )}
@@ -112,16 +113,16 @@ export default function ProductShow({ product, related }) {
                                 </Button>
                             </div>
 
-                            <div className="mt-6 flex items-center gap-2 text-sm text-ink-400">
-                                <ShieldCheck className="h-4 w-4 text-brand-400" /> Comprá con confianza, coordinamos
+                            <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
+                                <ShieldCheck className="h-4 w-4 text-primary" /> Comprá con confianza, coordinamos
                                 entrega o retiro en el local.
                             </div>
                         </div>
                     </div>
 
                     {related.length > 0 && (
-                        <div className="mt-16 border-t border-white/10 pt-10">
-                            <h2 className="mb-6 font-display text-xl font-bold text-white">También te puede interesar</h2>
+                        <div className="mt-16 border-t border-border pt-10">
+                            <h2 className="mb-6 font-display text-xl font-bold text-foreground">También te puede interesar</h2>
                             <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
                                 {related.map((item) => (
                                     <ProductCard key={item.id} product={item} />
@@ -129,7 +130,7 @@ export default function ProductShow({ product, related }) {
                             </div>
                         </div>
                     )}
-                </div>
+                </Container>
             </section>
         </PublicLayout>
     );

@@ -4,47 +4,79 @@ import DynamicIcon from '@/Components/DynamicIcon';
 import WhatsAppIcon from '@/Components/Icons/WhatsAppIcon';
 import Modal from '@/Components/UI/Modal';
 import Button from '@/Components/UI/Button';
-import { formatCurrency, waLink } from '@/lib/utils';
+import { formatCurrency, waLink, cn } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 
-export default function ServiceCard({ service }) {
+const sizeClasses = {
+    lg: 'lg:col-span-2 lg:row-span-2 lg:p-8',
+    wide: 'lg:col-span-2 lg:p-7',
+    default: 'lg:p-6',
+};
+
+export default function ServiceCard({ service, size = 'default' }) {
     const { settings } = usePage().props;
     const [open, setOpen] = useState(false);
+    const featured = size !== 'default';
 
     return (
         <>
             <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="group flex w-full flex-col rounded-2xl border border-white/10 bg-ink-900 p-6 text-left shadow-sm transition hover:-translate-y-1 hover:border-brand-500/40 hover:shadow-brand"
+                className={cn(
+                    'group relative flex h-full w-full flex-col overflow-hidden rounded-card border border-border bg-surface p-6 text-left shadow-sm transition duration-180 ease-out-soft hover:-translate-y-1 hover:border-primary/40 hover:bg-surface-hover hover:shadow-glow-sm',
+                    sizeClasses[size],
+                )}
             >
-                <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient text-white">
-                    <DynamicIcon name={service.icon} className="h-6 w-6" />
+                {featured && (
+                    <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl transition duration-300 group-hover:bg-primary/20" />
+                )}
+
+                <span
+                    className={cn(
+                        'relative mb-4 flex items-center justify-center rounded-control bg-brand-gradient text-white',
+                        size === 'lg' ? 'h-14 w-14' : 'h-12 w-12',
+                    )}
+                >
+                    <DynamicIcon name={service.icon} className={size === 'lg' ? 'h-7 w-7' : 'h-6 w-6'} />
                 </span>
-                <h3 className="font-display text-base font-semibold text-white">{service.title}</h3>
-                <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-ink-400">
+
+                <h3
+                    className={cn(
+                        'relative font-display font-semibold text-foreground',
+                        size === 'lg' ? 'text-xl' : 'text-base',
+                    )}
+                >
+                    {service.title}
+                </h3>
+                <p
+                    className={cn(
+                        'relative mt-2 flex-1 leading-relaxed text-muted-foreground',
+                        size === 'lg' ? 'text-sm sm:max-w-md' : 'line-clamp-3 text-sm',
+                    )}
+                >
                     {service.description}
                 </p>
 
-                <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
+                <div className="relative mt-4 flex items-center justify-between border-t border-border pt-4">
                     <span className="text-sm font-medium text-ink-300">
                         {service.price_from ? `Desde ${formatCurrency(service.price_from)}` : 'Precio a consultar'}
                     </span>
-                    <span className="flex items-center gap-1 text-sm font-semibold text-brand-400">
-                        Ver más <ArrowRight className="h-4 w-4" />
+                    <span className="flex items-center gap-1 text-sm font-semibold text-primary transition duration-180 group-hover:gap-1.5">
+                        Ver servicio <ArrowRight className="h-4 w-4" />
                     </span>
                 </div>
             </button>
 
-            <Modal show={open} onClose={() => setOpen(false)} maxWidth="sm">
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gradient text-white">
+            <Modal show={open} onClose={() => setOpen(false)} maxWidth="sm" theme="dark">
+                <span className="flex h-12 w-12 items-center justify-center rounded-control bg-brand-gradient text-white">
                     <DynamicIcon name={service.icon} className="h-6 w-6" />
                 </span>
-                <h3 className="mt-4 pr-8 font-display text-lg font-semibold text-ink-900">{service.title}</h3>
-                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-ink-600">
+                <h3 className="mt-4 pr-8 font-display text-lg font-semibold text-foreground">{service.title}</h3>
+                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
                     {service.description}
                 </p>
-                <p className="mt-4 text-sm font-semibold text-ink-800">
+                <p className="mt-4 text-sm font-semibold text-ink-200">
                     {service.price_from ? `Desde ${formatCurrency(service.price_from)}` : 'Precio a consultar'}
                 </p>
 

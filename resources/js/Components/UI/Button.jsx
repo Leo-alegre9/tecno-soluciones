@@ -1,5 +1,8 @@
 import { Link } from '@inertiajs/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { cn } from '@/lib/utils';
+
+const MotionLink = motion.create(Link);
 
 const variants = {
     primary: 'bg-brand-gradient text-white shadow-brand hover:brightness-110 focus-visible:outline-brand-500',
@@ -28,8 +31,11 @@ export default function Button({
     type = 'button',
     ...props
 }) {
+    const shouldReduceMotion = useReducedMotion();
+    const tap = shouldReduceMotion ? {} : { whileTap: { scale: 0.97 } };
+
     const classes = cn(
-        'inline-flex items-center justify-center rounded-xl font-semibold transition duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none',
+        'inline-flex items-center justify-center rounded-control font-semibold transition duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none',
         variants[variant],
         sizes[size],
         className,
@@ -39,15 +45,15 @@ export default function Button({
 
     if (Component === Link || href) {
         return (
-            <Link href={href} className={classes} {...props}>
+            <MotionLink href={href} className={classes} {...tap} {...props}>
                 {children}
-            </Link>
+            </MotionLink>
         );
     }
 
     return (
-        <button type={type} className={classes} {...props}>
+        <motion.button type={type} className={classes} {...tap} {...props}>
             {children}
-        </button>
+        </motion.button>
     );
 }

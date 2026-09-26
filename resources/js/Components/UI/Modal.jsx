@@ -3,7 +3,9 @@ import { Fragment } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function Modal({ show, onClose, title, children, maxWidth = 'md' }) {
+export default function Modal({ show, onClose, title, children, maxWidth = 'md', theme = 'light' }) {
+    const dark = theme === 'dark';
+
     const widths = {
         sm: 'sm:max-w-sm',
         md: 'sm:max-w-lg',
@@ -23,7 +25,7 @@ export default function Modal({ show, onClose, title, children, maxWidth = 'md' 
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-ink-950/60" />
+                    <div className="fixed inset-0 bg-background/70 backdrop-blur-sm" />
                 </TransitionChild>
 
                 <div className="fixed inset-0 overflow-y-auto">
@@ -37,15 +39,31 @@ export default function Modal({ show, onClose, title, children, maxWidth = 'md' 
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <DialogPanel className={cn('relative w-full rounded-2xl bg-white p-6 shadow-xl', widths[maxWidth])}>
+                            <DialogPanel
+                                className={cn(
+                                    'relative w-full rounded-card p-6 shadow-xl',
+                                    dark ? 'border border-border bg-surface-elevated shadow-elevated' : 'bg-white',
+                                    widths[maxWidth],
+                                )}
+                            >
                                 {title ? (
                                     <div className="mb-4 flex items-center justify-between">
-                                        <DialogTitle className="font-display text-lg font-semibold text-ink-900">
+                                        <DialogTitle
+                                            className={cn(
+                                                'font-display text-lg font-semibold',
+                                                dark ? 'text-foreground' : 'text-ink-900',
+                                            )}
+                                        >
                                             {title}
                                         </DialogTitle>
                                         <button
                                             onClick={onClose}
-                                            className="rounded-lg p-1 text-ink-400 hover:bg-ink-100 hover:text-ink-600"
+                                            className={cn(
+                                                'rounded-control p-1',
+                                                dark
+                                                    ? 'text-ink-400 hover:bg-white/5 hover:text-white'
+                                                    : 'text-ink-400 hover:bg-ink-100 hover:text-ink-600',
+                                            )}
                                         >
                                             <X className="h-5 w-5" />
                                         </button>
@@ -53,7 +71,12 @@ export default function Modal({ show, onClose, title, children, maxWidth = 'md' 
                                 ) : (
                                     <button
                                         onClick={onClose}
-                                        className="absolute right-4 top-4 rounded-lg p-1 text-ink-400 hover:bg-ink-100 hover:text-ink-600"
+                                        className={cn(
+                                            'absolute right-4 top-4 rounded-control p-1',
+                                            dark
+                                                ? 'text-ink-400 hover:bg-white/5 hover:text-white'
+                                                : 'text-ink-400 hover:bg-ink-100 hover:text-ink-600',
+                                        )}
                                     >
                                         <X className="h-5 w-5" />
                                     </button>

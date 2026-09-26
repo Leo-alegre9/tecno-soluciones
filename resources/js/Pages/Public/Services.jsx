@@ -1,11 +1,16 @@
 import { Head, usePage } from '@inertiajs/react';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import Container from '@/Components/UI/Container';
+import Reveal from '@/Components/UI/Reveal';
 import ServiceCard from '@/Components/ServiceCard';
 import Button from '@/Components/UI/Button';
 import WhatsAppIcon from '@/Components/Icons/WhatsAppIcon';
 import { waLink } from '@/lib/utils';
 import { ChevronDown, ClipboardList, FileText, Wrench, PackageCheck } from 'lucide-react';
+
+const SERVICE_SIZES = ['lg', 'wide'];
+const SERVICE_SPANS = { lg: 'lg:col-span-2 lg:row-span-2', wide: 'lg:col-span-2' };
 
 const steps = [
     { icon: ClipboardList, title: 'Recepción', text: 'Registramos el equipo, la falla y los accesorios que entregás.' },
@@ -40,59 +45,64 @@ export default function Services({ services }) {
         <PublicLayout>
             <Head title="Servicios" />
 
-            <section className="bg-ink-950 py-16">
-                <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-                    <h1 className="font-display text-3xl font-bold text-white sm:text-4xl">Nuestros servicios</h1>
-                    <p className="mt-4 text-ink-300">
+            <section className="py-16 sm:py-20">
+                <Container className="max-w-3xl text-center">
+                    <h1 className="font-display text-3xl font-bold text-foreground sm:text-4xl">Nuestros servicios</h1>
+                    <p className="mt-4 text-muted-foreground">
                         Reparación y mantenimiento de celulares, notebooks, PC y microelectrónica en general, con
                         diagnóstico transparente y garantía escrita. Tocá un servicio para ver el detalle.
                     </p>
-                </div>
+                </Container>
             </section>
 
-            <section className="border-t border-white/5 bg-ink-950 py-16">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        {services.map((service) => (
-                            <ServiceCard key={service.id} service={service} />
-                        ))}
+            <section className="border-t border-border py-16 sm:py-20">
+                <Container>
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[220px]">
+                        {services.map((service, index) => {
+                            const size = SERVICE_SIZES[index] ?? 'default';
+                            return (
+                                <Reveal key={service.id} delay={index * 0.03} className={SERVICE_SPANS[size]}>
+                                    <ServiceCard service={service} size={size} />
+                                </Reveal>
+                            );
+                        })}
                     </div>
-                </div>
+                </Container>
             </section>
 
-            <section className="border-t border-white/5 bg-ink-900/40 py-16">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-center font-display text-2xl font-bold text-white sm:text-3xl">
+            <section className="border-t border-border bg-surface/30 py-16 sm:py-20">
+                <Container>
+                    <h2 className="text-center font-display text-2xl font-bold text-foreground sm:text-3xl">
                         ¿Cómo trabajamos?
                     </h2>
                     <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                         {steps.map((step, index) => (
-                            <div key={step.title} className="relative rounded-2xl border border-white/10 bg-ink-900 p-6">
+                            <div key={step.title} className="relative rounded-card border border-border bg-surface p-6">
                                 <span className="absolute -top-3 left-6 flex h-7 w-7 items-center justify-center rounded-full bg-brand-gradient text-xs font-bold text-white">
                                     {index + 1}
                                 </span>
-                                <step.icon className="mt-2 h-6 w-6 text-brand-400" />
-                                <h3 className="mt-3 font-display text-sm font-semibold text-white">{step.title}</h3>
-                                <p className="mt-2 text-sm text-ink-400">{step.text}</p>
+                                <step.icon className="mt-2 h-6 w-6 text-primary" />
+                                <h3 className="mt-3 font-display text-sm font-semibold text-foreground">{step.title}</h3>
+                                <p className="mt-2 text-sm text-muted-foreground">{step.text}</p>
                             </div>
                         ))}
                     </div>
-                </div>
+                </Container>
             </section>
 
-            <section className="border-t border-white/5 bg-ink-950 py-16">
-                <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-center font-display text-2xl font-bold text-white">Preguntas frecuentes</h2>
+            <section className="border-t border-border py-16 sm:py-20">
+                <Container className="max-w-3xl">
+                    <h2 className="text-center font-display text-2xl font-bold text-foreground">Preguntas frecuentes</h2>
                     <div className="mt-8 space-y-3">
                         {faqs.map((faq) => (
-                            <Disclosure key={faq.q} as="div" className="rounded-xl border border-white/10 bg-ink-900">
+                            <Disclosure key={faq.q} as="div" className="rounded-card border border-border bg-surface">
                                 {({ open }) => (
                                     <>
-                                        <DisclosureButton className="flex w-full items-center justify-between px-5 py-4 text-left text-sm font-semibold text-white">
+                                        <DisclosureButton className="flex min-h-[44px] w-full items-center justify-between px-5 py-4 text-left text-sm font-semibold text-foreground">
                                             {faq.q}
-                                            <ChevronDown className={`h-4 w-4 text-ink-400 transition ${open ? 'rotate-180' : ''}`} />
+                                            <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition duration-220 ${open ? 'rotate-180' : ''}`} />
                                         </DisclosureButton>
-                                        <DisclosurePanel className="px-5 pb-4 text-sm text-ink-400">
+                                        <DisclosurePanel className="px-5 pb-4 text-sm text-muted-foreground">
                                             {faq.a}
                                         </DisclosurePanel>
                                     </>
@@ -100,11 +110,11 @@ export default function Services({ services }) {
                             </Disclosure>
                         ))}
                     </div>
-                </div>
+                </Container>
             </section>
 
-            <section className="border-t border-white/5 bg-brand-gradient">
-                <div className="mx-auto flex max-w-4xl flex-col items-center gap-5 px-4 py-14 text-center">
+            <section className="relative overflow-hidden border-t border-border bg-brand-gradient">
+                <Container className="relative flex flex-col items-center gap-5 py-14 text-center sm:py-16">
                     <h2 className="font-display text-2xl font-bold text-white">¿Listo para reparar tu equipo?</h2>
                     <Button
                         href={waLink(settings.whatsapp_number, 'Hola! Quiero consultar por un servicio técnico.')}
@@ -114,7 +124,7 @@ export default function Services({ services }) {
                     >
                         <WhatsAppIcon className="h-5 w-5" /> Escribinos por WhatsApp
                     </Button>
-                </div>
+                </Container>
             </section>
         </PublicLayout>
     );
