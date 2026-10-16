@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    ::selection {
+        background-color: rgba(241, 84, 28, 0.35);
+        color: #fafafa;
+    }
+
+    :focus-visible {
+        outline: 2px solid #f1541c;
+        outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+/* Height of the sticky public header (SiteHeader). Hero sections use it to
+   extend underneath the header so their glow starts at the very top. */
+:root {
+    --header-h: 74px;
+}
+
+@media (min-width: 640px) {
+    :root {
+        --header-h: 78px;
+    }
+}
+
+/* Orange pulse travelling along a background circuit trace (see SiteBackground). */
+@keyframes trace-pulse {
+    0% {
+        stroke-dashoffset: 0.12;
+    }
+    45%,
+    100% {
+        stroke-dashoffset: -1;
+    }
+}
+
+.trace-pulse {
+    stroke-dasharray: 0.12 3;
+    stroke-dashoffset: 0.12;
+    animation: trace-pulse var(--pulse-duration, 8s) cubic-bezier(0.45, 0, 0.55, 1) var(--pulse-delay, 0s) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .trace-pulses {
+        display: none;
+    }
+}
+
+@layer utilities {
+    .text-gradient-brand {
+        background-image: linear-gradient(135deg, #f1541c 0%, #f0a93b 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
