@@ -8,7 +8,6 @@ import GradientGlow from '@/Components/UI/GradientGlow';
 import Reveal from '@/Components/UI/Reveal';
 import Button from '@/Components/UI/Button';
 import TypeText from '@/Components/UI/TypeText';
-import ProductCard from '@/Components/ProductCard';
 import ServiceCard from '@/Components/ServiceCard';
 import HeroVisual from '@/Components/HeroVisual';
 import RepairServiceFinder from '@/Components/RepairServiceFinder';
@@ -22,7 +21,7 @@ const HERO_DEVICES = ['celular', 'notebook', 'PC', 'tablet', 'iPhone', 'parlante
 const SERVICE_SIZES = ['lg', 'wide'];
 const SERVICE_SPANS = { lg: 'lg:col-span-2 lg:row-span-2', wide: 'lg:col-span-2' };
 
-export default function Home({ featuredProducts, categories, services }) {
+export default function Home({ categories, services }) {
     const settings = useSettings();
     const waHref = waLink(settings.whatsapp_number, 'Hola Tecno Soluciones! Quiero hacer una consulta.');
 
@@ -131,27 +130,6 @@ export default function Home({ featuredProducts, categories, services }) {
                     </div>
                 </Container>
             </section>
-
-            {/* FEATURED PRODUCTS */}
-            {featuredProducts.length > 0 && (
-                <section className="border-t border-border py-16 sm:py-20">
-                    <Container>
-                        <SectionHeader
-                            title="Productos destacados"
-                            description="Equipos y accesorios disponibles ahora."
-                            action={{ href: '/catalogo', label: 'Ver catálogo completo' }}
-                        />
-
-                        <div className="no-scrollbar mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:grid sm:snap-none sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:pb-0 lg:grid-cols-4">
-                            {featuredProducts.map((product) => (
-                                <div key={product.id} className="w-[72%] shrink-0 snap-center sm:w-auto">
-                                    <ProductCard product={product} />
-                                </div>
-                            ))}
-                        </div>
-                    </Container>
-                </section>
-            )}
         </PublicLayout>
     );
 }
